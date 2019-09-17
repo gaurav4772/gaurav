@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add to Cart</title>
+	<link rel="stylesheet" type="text/css" href="common/css/style.css">
+</head>
+<body>
+	<header>
+		<div class="container">
+			<div class="inner-header">
+				<h3>All Items</h3>
+				<span><small id="itemNameCart"></small> is added to cart</span>
+				<button type="button">Go to cart <small>5</small></button>
+			</div>
+		</div>
+	</header>
+	<section>
+		<div class="container">
+			<div class="inner-items">
+				<ul id="result">
+					
+				</ul>
+			</div>
+		</div>
+	</section>
+	<script src="common/js/jQueryv3.3.1.js"></script>
+	<script>
+
+		var request = new XMLHttpRequest()
+
+		request.open('Get','https://api.myjson.com/bins/qhnfp', true)
+
+		request.onload = function() {
+			var data = JSON.parse(this.response)
+
+			data.forEach(items => {
+				console.log(items);
+			 	var itemName = document.getElementById('result');
+
+				itemName.innerHTML += '<li><div class="image" id="'+items.id+'"><img src="'+items.img_url+'" alt=""><span>'+items.discount+'% off</span></div><div class="item-details"><div class="price-section"><span id = "singleitmname">'+items.name+'</span><p><span><del>$'+items.price+'</del></span><small>&nbsp;$'+Math.round((items.price -(items.price*(items.discount/100))))+'</small></p></div><div class="cart-button"><button type="button" class="add-cart" onclick=addToCart("'+items.name+'")>Add to cart</button></div></div></li>'; 	
+						if(items.discount == 0){
+			 				$('#'+items.id+' span').hide();
+			 			}
+					})
+		}
+		request.send()
+
+		function addToCart(itemsName){
+			var x = document.getElementById('itemNameCart');
+			x.innerText = itemsName;
+			
+			$(".inner-header span").fadeIn();
+			
+			setTimeout(function(){
+				$(".inner-header span").fadeOut();
+			},2000);
+		}
+		
+	</script>
+</body>
+</html>
